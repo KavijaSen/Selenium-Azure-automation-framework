@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 trigger:
 - main
 
@@ -36,3 +37,43 @@ steps:
     publishLocation: 'pipeline'
   condition: succeededOrFailed()
   displayName: 'Publish HTML report'
+=======
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.11'
+  displayName: 'Use Python 3.11'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- script: |
+    mkdir -p reports
+    pytest tests/ --junitxml=test-results.xml --html=reports/report.html --self-contained-html
+  displayName: 'Run automated tests'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'test-results.xml'
+    failTaskOnFailedTests: true
+    testRunTitle: 'Python Selenium Login Tests'
+  condition: succeededOrFailed()
+  displayName: 'Publish test results'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: 'reports'
+    artifact: 'test-report'
+    publishLocation: 'pipeline'
+  condition: succeededOrFailed()
+  displayName: 'Publish HTML report artifact'
+>>>>>>> cde60a4 (Final update: add screenshots, update code and pipeline)
