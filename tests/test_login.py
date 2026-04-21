@@ -1,6 +1,6 @@
 import pytest
-from pages.driver_factory import DriverFactory
-from pages.login_page import LoginPage
+from drivers.driver_factory import DriverFactory
+from login_page import LoginPage
 
 @pytest.fixture
 def driver():
